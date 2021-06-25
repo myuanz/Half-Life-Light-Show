@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>half life - MMAMAMMMMMAMMAMAMAAAMAMMMA!</title>
+</head>
+
+<body>
+    <div class="main">
+        <canvas id="show"></canvas>
+
+        <input id="light-code" value="MMAMAMMMMMAMMAMAMAAAMAMMMA" />
+
+        <i>启发于 <a href="https://zhuanlan.zhihu.com/p/382628299">此</a></i>
+    </div>
+
+    <script>
+        const light_code_element = document.getElementById('light-code');
+
+        const pass = () => { };
+
+        const handle_input = e => {
+            if (/[A-Z]/.test(e.data)) {
+                pass
+            } else if (/[a-z]/.test(e.data)) {
+                e.target.value = e.target.value.toUpperCase();
+            } else {
+                e.target.value = e.target.value.slice(0, -1);
+            }
+        }
+        light_code_element.addEventListener('input', handle_input);
+
+
+        const show_element = document.getElementById('show');
+        const ctx = show_element.getContext('2d');
+
+
+        let count = 0;
+        let last_time = 0;
+        const step = timestamp => {
+            if (timestamp - last_time > 150){
+                if (light_code_element.value.length) {
+                    const code = light_code_element.value.charCodeAt(count % light_code_element.value.length);
+                    const color = Math.ceil((code - 65 + 1) / 26 * 255);
+                    console.log(timestamp, color)
+                    ctx.fillStyle = `rgb(${color}, ${color}, ${color})`;
+                    ctx.fillRect(0, 0, show_element.width, show_element.height);
+                }
+                last_time = timestamp;
+                count ++;
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        window.requestAnimationFrame(step);
+
+    </script>
+    <style>
+        html,
+        body,
+        .main {
+            background-color: black;
+            height: 100%;
+            margin: 0;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #show {
+            width: 60%;
+            height: 60%;
+            background-color: black;
+            margin: 12px;
+        }
+
+        #light-code {
+            background-color: rgb(65, 61, 61);
+            color: blanchedalmond;
+            width: 60%;
+        }
+
+        i {
+            color: blanchedalmond;
+
+        }
+    </style>
+</body>
+
+</html>
